@@ -6,11 +6,11 @@ describe("Check whether two strings are anagrams", () => {
   expect(areAnagrams("listen", "silent")).toBe(true);
  });
 
- it("evil, vile returns true", () => {
+ it("evil and vile returns true", () => {
   expect(areAnagrams("evil", "vile")).toBe(true);
  });
 
- it("rat, car returns false", () => {
+ it("rat and car returns false", () => {
   expect(areAnagrams("rat", "car")).toBe(false);
  });
 
@@ -18,7 +18,7 @@ describe("Check whether two strings are anagrams", () => {
   expect(areAnagrams("", "")).toBe(true);
  });
 
- it("aab, abb, returns false", () => {
+ it("aab and abb returns false", () => {
   expect(areAnagrams("aab", "abb")).toBe(false);
  });
 
