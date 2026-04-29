@@ -19,6 +19,32 @@ export class BinarySearchTree {
   return false;
  }
 
+ breadthFirst() {
+  if(!this.root){
+   return [];
+  }
+  
+  const result = [];
+  const queue = [this.root];
+  let index = 0; 
+
+  while(index < queue.length) {
+   const current = queue[index];
+   index++;
+
+   result.push(current.value);
+  
+   if(current.left) {
+    queue.push(current.left);
+   }
+
+   if(current.right) {
+    queue.push(current.right);
+   }
+  }
+  return result;
+ }
+
  postOrder() {
   const results = [];
   
