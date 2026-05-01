@@ -117,4 +117,54 @@ describe("graph starts with an empty adjacency list", () => {
  
   expect(graph.breadthFirst("A")).toEqual(["A", "B"]);
  });
+
+ it("depthFirst returns an empty array when the start vertex does not exist", () => {
+  const graph = new Graph();
+  
+  expect(graph.depthFirst("A")).toEqual([]); 
+ });
+ 
+ it("depthFirst returns the start vertex when it has no neighbors", () => {
+  const graph = new Graph();
+  graph.addVertex("A");
+
+  expect(graph.depthFirst("A")).toEqual(["A"]);
+ });
+
+ it("depthFirst visits the start vertex and its direct neighbor", () => {
+  const graph = new Graph();
+  graph.addEdge("A", "B");
+
+  expect(graph.depthFirst("A")).toEqual(["A", "B"]); 
+ });
+
+ it("depthFirst explores as far as possible before backtracking", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+  graph.addEdge("A", "C");
+  graph.addEdge("B", "D");
+  graph.addEdge("C", "E");
+
+  expect(graph.depthFirst("A")).toEqual(["A", "B", "D", "C", "E"]);
+ });
+ 
+ it("depthFirst handles cycles without visiting vertices twice", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+  graph.addEdge("B", "C");
+  graph.addEdge("C", "A");
+
+  expect(graph.depthFirst("A")).toEqual(["A", "B", "C"]);
+ });
+ 
+ it("depthFirst only visits vertices connected to the start vertex", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+  graph.addEdge("C", "D");
+
+  expect(graph.depthFirst("A")).toEqual(["A", "B"]);
+ });
 });

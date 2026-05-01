@@ -19,6 +19,28 @@ class Graph {
    this.adjacencyList[vertex2].push(vertex1);
   }
  }
+
+ depthFirst(vertex){
+  if(!this.adjacencyList[vertex]){
+   return [];
+  }
+  const result = [];
+  const visited = new Set();
+
+  const visit = (startVertex) => {
+   visited.add(startVertex);
+   result.push(startVertex);
+   
+   for(const neighbor of this.adjacencyList[startVertex]){
+    if(!visited.has(neighbor)){
+     visit(neighbor);
+    }
+   }
+  }
+  visit(vertex);
+  return result;
+ }
+
  breadthFirst(vertex){
   if(!this.adjacencyList[vertex]){
    return [];
