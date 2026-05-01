@@ -167,4 +167,46 @@ describe("graph starts with an empty adjacency list", () => {
 
   expect(graph.depthFirst("A")).toEqual(["A", "B"]);
  });
+
+ it("removeEdge removes the connection between two vertices in both directions", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+  graph.addEdge("A", "C");
+  
+  graph.removeEdge("A", "B");
+
+  expect(graph.adjacencyList).toEqual({A:["C"], B:[], C:["A"]});
+ });
+
+ it("removeEdge does nothing if one or both vertices do not exist", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+
+  graph.removeEdge("A", "C");
+  graph.removeEdge("X", "Y");
+
+  expect(graph.adjacencyList).toEqual({A:["B"], B:["A"]});
+ });
+
+ it("removeVertex removes a vertex and all edges connected to it", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+  graph.addEdge("A", "C");
+
+  graph.removeVertex("A");
+
+  expect(graph.adjacencyList).toEqual({B:[], C:[]});
+ });
+
+it("removeVertex does nothing if the vertex does not exist", () => {
+  const graph = new Graph();
+
+  graph.addEdge("A", "B");
+  graph.removeVertex("X");
+
+  expect(graph.adjacencyList).toEqual({A:["B"], B:["A"]});
+ });
 });

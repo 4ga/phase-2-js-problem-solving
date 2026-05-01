@@ -7,6 +7,24 @@ class Graph {
    this.adjacencyList[vertex] = [];
   }
  }
+
+ removeVertex(vertex) {
+  if(!this.adjacencyList[vertex]){
+   return;
+  }
+  for(const neighbor of this.adjacencyList[vertex]){
+   this.removeEdge(vertex, neighbor);
+  }
+  delete this.adjacencyList[vertex];
+ }
+
+ removeEdge(vertex1, vertex2){
+  if(!this.adjacencyList[vertex1] || !this.adjacencyList[vertex2]) {
+   return;
+  }
+  this.adjacencyList[vertex1]=this.adjacencyList[vertex1].filter(neighbor => neighbor !== vertex2);
+  this.adjacencyList[vertex2]=this.adjacencyList[vertex2].filter(neighbor => neighbor !== vertex1);
+ }
  addEdge(vertex1, vertex2) {
   this.addVertex(vertex1);
   this.addVertex(vertex2);
