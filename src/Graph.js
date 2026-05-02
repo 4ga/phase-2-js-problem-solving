@@ -8,6 +8,35 @@ class Graph {
   }
  }
 
+ hasPath(source, target){
+  if(!this.adjacencyList[source] || !this.adjacencyList[target]){
+   return false;
+  }
+  if(source === target){
+   return true;
+  }
+  const queue = [source];
+  const visited = new Set();
+
+  let index = 0; 
+  
+  while(index < queue.length){
+   const currentVertex = queue[index];
+   index++;
+   
+   for(const neighbor of this.adjacencyList[currentVertex]) {
+     if(neighbor === target) {
+      return true;
+    }
+    if(!visited.has(neighbor)){
+      visited.add(neighbor);
+      queue.push(neighbor);
+    }
+   }
+  } 
+  return false;
+ }
+
  removeVertex(vertex) {
   if(!this.adjacencyList[vertex]){
    return;

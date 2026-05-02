@@ -209,4 +209,59 @@ it("removeVertex does nothing if the vertex does not exist", () => {
 
   expect(graph.adjacencyList).toEqual({A:["B"], B:["A"]});
  });
+
+ it("hasPath returns false if one or both vertices do not exist", () => {
+  const graph = new Graph();
+
+  graph.addEdge("A", "B");
+  
+  expect(graph.hasPath("A", "X")).toBe(false);
+  expect(graph.hasPath("X", "B")).toBe(false);
+  expect(graph.hasPath("X", "Y")).toBe(false);
+ });
+
+ it("hasPath returns true when source and target are the same vertex", () => {
+  const graph = new Graph();
+  
+  graph.addVertex("A");
+  expect(graph.hasPath("A", "A")).toBe(true);
+ });
+ 
+ it("hasPath returns true when source and target directly connected", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+
+  expect(graph.hasPath("A", "B")).toBe(true);
+ });
+
+ it("hasPath returns true when target is reachable through other vertices", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+  graph.addEdge("B", "C");
+  graph.addEdge("C", "D");
+
+  expect(graph.hasPath("A", "D")).toBe(true);
+ });
+
+ it("hasPath returns false when target is not reachable from source", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+  graph.addEdge("C", "D");
+
+  expect(graph.hasPath("A", "D")).toBe(false);
+ });
+
+ it("hasPath handles cycles without getting stuck", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+  graph.addEdge("B", "C");
+  graph.addEdge("C", "A");
+  graph.addEdge("C", "D");
+
+  expect(graph.hasPath("A", "D")).toBe(true);
+ });
 });
