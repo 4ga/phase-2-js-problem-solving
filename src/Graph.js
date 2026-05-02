@@ -8,6 +8,40 @@ class Graph {
   }
  }
 
+ shortestPath(source, target){
+  if(!this.adjacencyList[source] || !this.adjacencyList[target]){
+   return [];
+  }
+  if(source === target){
+   return[source];
+  }
+  const queue = [[source]];
+  const visited = new Set();
+
+  visited.add(source);
+
+  let index = 0;
+
+  while(index < queue.length) {
+   const path = queue[index];
+   index++;
+ 
+   const currentVertex = path[path.length - 1];
+  
+   for(const neighbor of this.adjacencyList[currentVertex]) {
+    if(neighbor === target){
+      return[...path, neighbor];
+    }
+  
+    if(!visited.has(neighbor)){
+     visited.add(neighbor);
+     queue.push([...path, neighbor]);
+    }
+   }
+  }
+  return [];
+ }
+
  hasPath(source, target){
   if(!this.adjacencyList[source] || !this.adjacencyList[target]){
    return false;

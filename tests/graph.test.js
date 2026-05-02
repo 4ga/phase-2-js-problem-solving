@@ -264,4 +264,70 @@ it("removeVertex does nothing if the vertex does not exist", () => {
 
   expect(graph.hasPath("A", "D")).toBe(true);
  });
+ it("shortestPath returns an empty array if one or both vertices do not exist", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+
+  expect(graph.shortestPath("A", "X")).toEqual([]);
+  expect(graph.shortestPath("X", "B")).toEqual([]);
+  expect(graph.shortestPath("X", "Y")).toEqual([]);
+  
+ });
+
+ it("shortestPath returns the source when source and target are the same vertex", () =>{
+  const graph = new Graph();
+  graph.addVertex("A");
+
+  expect(graph.shortestPath("A", "A")).toEqual(["A"]);
+ });
+
+ it("shortestPath returns a direct path between connected vertices", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+  expect(graph.shortestPath("A", "B")).toEqual(["A", "B"]);
+ });
+
+ it("shortestPath returns the shortest path through intermediate vertices", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+  graph.addEdge("B", "C");
+  graph.addEdge("C", "D");
+
+  expect(graph.shortestPath("A", "D")).toEqual(["A", "B", "C", "D"]);
+ });
+
+ it("shortestPath chooses the shortest path when multiple paths exist", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+  graph.addEdge("B", "C");
+  graph.addEdge("C", "D");
+  graph.addEdge("A", "E");
+  graph.addEdge("E", "D");
+
+  expect(graph.shortestPath("A", "D")).toEqual(["A", "E", "D"]);
+ });
+
+ it("shortestPath returns an empty array when no path exists", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+  graph.addEdge("C", "D");
+
+  expect(graph.shortestPath("A", "D")).toEqual([]);
+ });
+
+ it("shortestPath handles cycles without getting stuck", () =>{
+  const graph = new Graph();
+
+  graph.addEdge("A", "B");
+  graph.addEdge("B", "C");
+  graph.addEdge("C", "A");
+  graph.addEdge("C", "D");
+
+  expect(graph.shortestPath("A", "D")).toEqual(["A", "C", "D"]);
+ });
 });
