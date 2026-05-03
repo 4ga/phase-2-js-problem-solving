@@ -330,4 +330,71 @@ it("removeVertex does nothing if the vertex does not exist", () => {
 
   expect(graph.shortestPath("A", "D")).toEqual(["A", "C", "D"]);
  });
+
+ it("shortestPathWithParents returns an empty array if one or both vertices do not exist", () => {
+  const graph = new Graph();
+  graph.addEdge("A", "B");
+
+  expect(graph.shortestPathWithParents("A", "X")).toEqual([]);
+  expect(graph.shortestPathWithParents("X", "B")).toEqual([]);
+  expect(graph.shortestPathWithParents("X", "Y")).toEqual([]);
+ 
+ });
+
+ it("shortestPathWithParents returns the source when source and target are the same vertex", () => {
+  const graph = new Graph();
+  
+  graph.addVertex("A");
+
+  expect(graph.shortestPathWithParents("A", "A")).toEqual(["A"]);
+ });
+
+ it("shortestPathWithParents returns a direct path between connected vertices", () => {
+  const graph = new Graph();
+
+  graph.addEdge("A", "B");
+  expect(graph.shortestPathWithParents("A", "B")).toEqual(["A", "B"]);
+ });
+
+ it("shortestPathWithParents returns the shortest path through intermediate vertices", () => {
+  const graph = new Graph();
+  
+  graph.addEdge("A", "B");
+  graph.addEdge("B", "C");
+  graph.addEdge("C", "D");
+
+  expect(graph.shortestPathWithParents("A", "D")).toEqual(["A", "B", "C", "D"]);
+ });
+
+ it("shortestPathWithParents chooses the shortest path when multiple paths exists", () => {
+  const graph = new Graph();
+
+  graph.addEdge("A", "B");
+  graph.addEdge("B", "C");
+  graph.addEdge("C", "D");
+  graph.addEdge("A", "E");
+  graph.addEdge("E", "D");
+
+  expect(graph.shortestPathWithParents("A", "D")).toEqual(["A", "E", "D"]);
+ });
+
+ it("shortestPathWithParents returns an empty array when no path exists", () => {
+  const graph = new Graph();
+
+  graph.addEdge("A", "B");
+  graph.addEdge("C", "D");
+
+  expect(graph.shortestPathWithParents("A", "D")).toEqual([]);
+ });
+
+ it("shortestPathWithParents handles cycles without getting stuck", () => {
+  const graph = new Graph();
+
+  graph.addEdge("A", "B");
+  graph.addEdge("B", "C");
+  graph.addEdge("C", "A");
+  graph.addEdge("C", "D");
+
+  expect(graph.shortestPathWithParents("A", "D")).toEqual(["A", "C", "D"]);
+ });
 });

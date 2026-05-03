@@ -8,6 +8,52 @@ class Graph {
   }
  }
 
+ shortestPathWithParents(source, target) {
+  if(!this.adjacencyList[source] || !this.adjacencyList[target]){
+   return [];
+  }
+  if(source === target){
+   return [source];
+  }
+  if(this.adjacencyList[source].includes(target)) {
+   return [source, target];
+  }
+  
+  const queue = [source];
+  const visited = new Set();
+  const parent = {};
+
+  visited.add(source);
+  
+  let index = 0;
+
+  while(index < queue.length){
+   const currentVertex = queue[index];
+   index++;
+
+   for(const neighbor of this.adjacencyList[currentVertex]){
+    if(!visited.has(neighbor)){
+      visited.add(neighbor);
+      parent[neighbor] = currentVertex;
+
+      if(neighbor === target){
+       const path = [];
+       let current = target;
+
+       while(current !== undefined){
+        path.push(current);
+        current = parent[current];
+       }
+       return path.reverse();
+      }
+      queue.push(neighbor);
+    }
+   }
+  }
+
+  return [];
+ }
+
  shortestPath(source, target){
   if(!this.adjacencyList[source] || !this.adjacencyList[target]){
    return [];
