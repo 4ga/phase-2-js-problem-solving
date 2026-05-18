@@ -1,3 +1,5 @@
+import PriorityQueue from "./PriorityQueue.js";
+
 class WeightedGraph {
  constructor() {
   this.adjacencyList = {};
@@ -6,6 +8,61 @@ class WeightedGraph {
   if(!this.adjacencyList[vertex]){
    this.adjacencyList[vertex] = [];
   }
+ }
+ dijkstra(source, target) {
+  if(!this.adjacencyList[source] || !this.adjacencyList[target]){
+   return [];
+  }
+
+  if(source === target){ 
+   return [source]
+  }
+ 
+  const distances = {};
+  const previous = {};
+  const queue = new PriorityQueue();
+
+  for(const vertex in this.adjacencyList){
+   distances[vertex] = Infinity;
+   previous[vertex] = null;
+  }
+
+  distances[source] = 0;
+  queue.enqueue(source, 0);
+
+  while(queue.values.length > 0) {
+   const currentItem = queue.dequeue();
+   const currentVertex = currentItem.value;
+   const currentDistance = currentItem.priority;
+
+   if(currentDistance > distances[currentVertex]) {
+    continue;
+   }
+
+   if(currentVertex === target) {
+    const path = [];
+    let current = target;
+
+    while(current !== null){
+     path.push(current);
+     current = previous[current];
+    }
+
+    return path.reverse();
+   }
+
+   for(const neighbor of this.adjacencyList[currentVertex]){
+    const candidateDistance = distances[currentVertex] + neighbor.weight;
+
+    if(candidateDistance < distances[neighbor.vertex]){
+     distances[neighbor.vertex] = candidateDistance;
+     previous[neighbor.vertex] = currentVertex;
+     queue.enqueue(neighbor.vertex, candidateDistance);
+    }
+   }
+  }
+
+  return [];
  }
  addEdge(vertex1, vertex2, weight){
   this.addVertex(vertex1);

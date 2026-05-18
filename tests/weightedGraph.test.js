@@ -65,4 +65,71 @@ describe("weighted graph tests", () => {
    B: [{vertex: "A", weight: 4}],
   });
  });
+
+ it("dijkstra returns an empty array if one or both vertices do not exist", () => {
+  const graph = new WeightedGraph();
+
+  graph.addEdge("A", "B", 4);
+
+  expect(graph.dijkstra("A", "X")).toEqual([]);
+  expect(graph.dijkstra("X", "B")).toEqual([]);
+  expect(graph.dijkstra("X", "Y")).toEqual([]);;
+ });
+
+ it("dijkstra returns the source when source and target are the same vertex", () => {
+  const graph = new WeightedGraph();
+
+  graph.addVertex("A");
+
+  expect(graph.dijkstra("A", "A")).toEqual(["A"]);
+ });
+
+ it("dijkstra returns a direct path between connected vertices", () => {
+  const graph = new WeightedGraph();
+
+  graph.addEdge("A", "B", 4);
+
+  expect(graph.dijkstra("A", "B")).toEqual(["A", "B"]);
+ });
+
+ it("dijkstra chooses a cheaper indirect path over a direct expensive path", () => {
+  const graph = new WeightedGraph();
+
+  graph.addEdge("A", "B", 4);
+  graph.addEdge("A", "C", 2);
+  graph.addEdge("C", "B", 1);
+
+  expect(graph.dijkstra("A", "B")).toEqual(["A", "C", "B"]);
+ });
+
+ it("dijkstra finds the lowest total cost path through multiple vertices", () => {
+  const graph = new WeightedGraph();
+
+  graph.addEdge("A", "B", 1);
+  graph.addEdge("B", "D", 10);
+  graph.addEdge("A", "C", 2);
+  graph.addEdge("C", "D", 2);
+
+  expect(graph.dijkstra("A", "D")).toEqual(["A", "C", "D"]);
+ });
+
+ it("dijkstra returns an empty array when no path exists", () => {
+  const graph = new WeightedGraph();
+
+  graph.addEdge("A", "B", 1);
+  graph.addEdge("C", "D", 1);
+
+  expect(graph.dijkstra("A", "D")).toEqual([]);
+ });
+
+ it("dijkstra handles cycles without stuck", () => {
+  const graph = new WeightedGraph();
+
+  graph.addEdge("A", "B", 1);
+  graph.addEdge("B", "C", 1);
+  graph.addEdge("C", "A", 1);
+  graph.addEdge("C", "D", 2);
+
+  expect(graph.dijkstra("A", "D")).toEqual(["A", "C", "D"]);
+ });
 });
