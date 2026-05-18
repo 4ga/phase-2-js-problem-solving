@@ -132,4 +132,49 @@ describe("weighted graph tests", () => {
 
   expect(graph.dijkstra("A", "D")).toEqual(["A", "C", "D"]);
  });
+
+ it("dijkstra chooses lower total weight over fewer edges", () => {
+  const graph = new WeightedGraph();
+
+  graph.addEdge("A", "D", 10);
+  graph.addEdge("A", "B", 1);
+  graph.addEdge("B", "C", 1);
+  graph.addEdge("C", "D", 1);
+
+  expect(graph.dijkstra("A", "D")).toEqual(["A", "B", "C", "D"]);
+ });
+
+ it("dijkstra returns one shortest path when multiple paths have equal cost", () => {
+  const graph = new WeightedGraph();
+
+  graph.addEdge("A", "B", 1);
+  graph.addEdge("B", "D", 2);
+  graph.addEdge("A", "C", 1);
+  graph.addEdge("C", "D", 2);
+
+  expect(graph.dijkstra("A", "D")).toEqual(["A", "B", "D"]);
+ });
+
+ it("dijkstra handles a longer graph with mixed weights", () => {
+  const graph = new WeightedGraph();
+
+  graph.addEdge("A", "B", 2);
+  graph.addEdge("A", "C", 5);
+  graph.addEdge("B", "C", 1);
+  graph.addEdge("B", "D", 4);
+  graph.addEdge("C", "D", 1);
+  graph.addEdge("D", "E", 3);
+
+  expect(graph.dijkstra("A", "E")).toEqual(["A", "B", "C", "D", "E"]);
+ });
+
+ it("dijkstra returns an empty array when the target exists but is unreachable", () => {
+  const graph = new WeightedGraph();
+
+  graph.addEdge("A", "B", 2);
+  graph.addEdge("B", "C", 3);
+  graph.addVertex("D");
+
+  expect(graph.dijkstra("A", "D")).toEqual([]);
+ });
 });
